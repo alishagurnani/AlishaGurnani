@@ -207,7 +207,7 @@ data_attempt <- occupation_educ2010 %>%
   filter(ACS_CODE == 2320)
 
 #write out to csv
-write.csv(ACS_2004, "/Users/agurnani/Documents/Spring Semester/Thesis/Data/Processed/ACS_2004.csv", row.names = FALSE)
+write.csv(ACS_2004, "Thesis/Data/Processed/ACS_2004.csv", row.names = FALSE)
 
 
 
