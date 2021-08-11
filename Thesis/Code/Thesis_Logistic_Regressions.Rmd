@@ -32,25 +32,25 @@ Logistic Regressions for Overeducation
 setwd("Thesis/Data/Processed")
 
 #read in all IPUMS ACS data first
-ACS_2004 <- read_csv("Processed/ACS_2004.csv")%>%
+ACS_2004 <- read_csv("ACS_2004.csv")%>%
  select(YEAR, OCC, OCCSOC, STATEFIP, AGE, RACE, SEX, MARST, CITIZEN, INCTOT, REGION,IND, EducAttainment, Overeducation)
-ACS_2005 <- read_csv("Processed/ACS_2005.csv")%>%
+ACS_2005 <- read_csv("ACS_2005.csv")%>%
  select(YEAR, OCC, OCCSOC, STATEFIP, AGE, RACE, SEX, MARST, CITIZEN, INCTOT, REGION,IND, EducAttainment, Overeducation)
 
-ACS_2006 <-read_csv("Processed/ACS_2006.csv")%>%
+ACS_2006 <-read_csv("ACS_2006.csv")%>%
   select(YEAR, OCC, OCCSOC, STATEFIP, AGE, RACE, SEX, MARST, CITIZEN, INCTOT, REGION,IND, EducAttainment, Overeducation)
 
-ACS_2007 <-read_csv("Processed/ACS_2007.csv")%>%
+ACS_2007 <-read_csv("ACS_2007.csv")%>%
   select(YEAR, OCC, OCCSOC, STATEFIP, AGE, RACE, SEX, MARST, CITIZEN, INCTOT, REGION,IND, EducAttainment, Overeducation)
-ACS_2008 <- read_csv("Processed/ACS_2008.csv")%>%
+ACS_2008 <- read_csv("ACS_2008.csv")%>%
   select(YEAR, OCC, OCCSOC, STATEFIP, AGE, RACE, SEX, MARST, CITIZEN, INCTOT, REGION,IND, EducAttainment, Overeducation)
-ACS_2009 <- read_csv("Processed/ACS_2009.csv")%>%
+ACS_2009 <- read_csv("ACS_2009.csv")%>%
   select(YEAR, OCC, OCCSOC, STATEFIP, AGE, RACE, SEX, MARST, CITIZEN, INCTOT, REGION,IND, EducAttainment, Overeducation)
-ACS_2010 <- read_csv("Processed/ACS_2010.csv")%>%
+ACS_2010 <- read_csv("ACS_2010.csv")%>%
   select(YEAR, OCC, OCCSOC, STATEFIP, AGE, RACE, SEX, MARST, CITIZEN, INCTOT, REGION,IND, EducAttainment, Overeducation)
-ACS_2011 <- read_csv("Processed/ACS_2011.csv")%>%
+ACS_2011 <- read_csv("ACS_2011.csv")%>%
  select(YEAR, OCC, OCCSOC, STATEFIP, AGE, RACE, SEX, MARST, CITIZEN, INCTOT, REGION,IND, EducAttainment, Overeducation)
-ACS_2012 <- read_csv("Processed/ACS_2012.csv")%>%
+ACS_2012 <- read_csv("ACS_2012.csv")%>%
  select(YEAR, OCC, OCCSOC, STATEFIP, AGE, RACE, SEX, MARST, CITIZEN, INCTOT, REGION,IND, EducAttainment, Overeducation)
 
 #read in BLS GDP 2004-2012
