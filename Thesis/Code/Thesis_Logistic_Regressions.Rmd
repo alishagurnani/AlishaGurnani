@@ -1,0 +1,151 @@
+---
+title: "Overeducation Logisitc Regression Models"
+author: "Alisha Gurnani"
+date: "5/10/2021"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+
+#opts_knit$set(root.dir = "/Users/agurnani/Documents/Spring Semester/Thesis/Data/Processed")
+library(tidyverse)
+library(dplyr)
+library(tidycensus)
+library(gdata)
+library(ggplot2)
+library(stargazer)
+library(gsubfn)
+library(plotly)
+library(tidyr)
+library(lemon)## for printing dataframes but look into others
+```
+
+
+Logistic Regressions for Overeducation
+
+
+```{r}
+#read in all of the separate CSVS
+setwd("/Users/agurnani/Documents/Spring Semester/Thesis/Data/Processed")
+
+#read in all IPUMS ACS data first
+ACS_2004 <- read_csv("Processed/ACS_2004.csv")%>%
+ select(YEAR, OCC, OCCSOC, STATEFIP, AGE, RACE, SEX, MARST, CITIZEN, INCTOT, REGION,IND, EducAttainment, Overeducation)
+ACS_2005 <- read_csv("Processed/ACS_2005.csv")%>%
+ select(YEAR, OCC, OCCSOC, STATEFIP, AGE, RACE, SEX, MARST, CITIZEN, INCTOT, REGION,IND, EducAttainment, Overeducation)
+
+ACS_2006 <-read_csv("Processed/ACS_2006.csv")%>%
+  select(YEAR, OCC, OCCSOC, STATEFIP, AGE, RACE, SEX, MARST, CITIZEN, INCTOT, REGION,IND, EducAttainment, Overeducation)
+
+ACS_2007 <-read_csv("Processed/ACS_2007.csv")%>%
+  select(YEAR, OCC, OCCSOC, STATEFIP, AGE, RACE, SEX, MARST, CITIZEN, INCTOT, REGION,IND, EducAttainment, Overeducation)
+ACS_2008 <- read_csv("Processed/ACS_2008.csv")%>%
+  select(YEAR, OCC, OCCSOC, STATEFIP, AGE, RACE, SEX, MARST, CITIZEN, INCTOT, REGION,IND, EducAttainment, Overeducation)
+ACS_2009 <- read_csv("Processed/ACS_2009.csv")%>%
+  select(YEAR, OCC, OCCSOC, STATEFIP, AGE, RACE, SEX, MARST, CITIZEN, INCTOT, REGION,IND, EducAttainment, Overeducation)
+ACS_2010 <- read_csv("Processed/ACS_2010.csv")%>%
+  select(YEAR, OCC, OCCSOC, STATEFIP, AGE, RACE, SEX, MARST, CITIZEN, INCTOT, REGION,IND, EducAttainment, Overeducation)
+ACS_2011 <- read_csv("Processed/ACS_2011.csv")%>%
+ select(YEAR, OCC, OCCSOC, STATEFIP, AGE, RACE, SEX, MARST, CITIZEN, INCTOT, REGION,IND, EducAttainment, Overeducation)
+ACS_2012 <- read_csv("Processed/ACS_2012.csv")%>%
+ select(YEAR, OCC, OCCSOC, STATEFIP, AGE, RACE, SEX, MARST, CITIZEN, INCTOT, REGION,IND, EducAttainment, Overeducation)
+
+#read in BLS GDP 2004-2012
+BLS_GDP <- read_csv("/Users/agurnani/Documents/Spring Semester/Thesis/Data/Processed/BeaGDP.csv") %>%
+  select(TimePeriod, DataValue)  %>%
+  rename(YEAR = TimePeriod,
+         GDP = DataValue) %>%
+  filter(YEAR != 2013)#changing the column names
+```
+
+
+
+```{r}
+#join all ACS csvs together
+All_ACS <- do.call("rbind", list(ACS_2004, ACS_2005, ACS_2006, ACS_2007, ACS_2008, ACS_2009, ACS_2010, ACS_2011, ACS_2012))
+head(All_ACS)
+
+```
+
+```{r}
+#join ACS with BLS
+
+All_data <- merge(All_ACS, BLS_GDP,by="YEAR")
+
+head(All_data)
+str(All_data)
+```
+
+
+
+```{r}
+#Create time periods Before (2004-2006), During (2007-2009), After(2010-2012)
+
+All_data["Period"] <- ifelse(All_data$YEAR == 2004 | All_data$YEAR == 2005 | All_data$YEAR == 2006, 1,
+                             ifelse(All_data$YEAR == 2007 | All_data$YEAR == 2008 | All_data$YEAR == 2009, 2,3))
+
+All_data
+
+```
+
+```{r}
+#Omit NAS in data
+All_data <- All_data %>%
+  na.omit()
+```
+
+
+```{r}
+#simple logisitic model first
+#Model 1 - overeducation and GDP only 
+options(scipen =999 )
+model_1 <- glm(Overeducation ~ GDP, All_data, family = binomial)
+summary(model_1)
+
+```
+
+
+```{r}
+#Model 2 - overeducation, GDP, and Period
+options(scipen =999 )
+model_2 <- glm(Overeducation ~ GDP + as.factor(Period), All_data, family = binomial) 
+summary(model_2)
+```
+
+
+
+```{r}
+#full model next
+##Model 3 <- Overeducation, Period, GDP, Educational attainment, Age, Sex
+options(scipen =999 )
+model_3 <- glm(Overeducation ~ GDP + as.factor(Period) + EducAttainment + AGE + as.factor(SEX) , All_data, family = binomial)
+summary(model_3)
+```
+
+  
+```{r}
+##Model 4 <- Overeducation, Period, GDP, Age, Sex - try without education attainment
+options(scipen =999 )
+model_4 <- glm(Overeducation ~ GDP + as.factor(Period) +  AGE + as.factor(SEX) , All_data, family = binomial)
+summary(model_4)
+```
+
+
+
+```{r}
+### output all models into a table
+options(scipen = 999)
+stargazer(model_1, digits = 10, type="html", out= "model_1.html" , title = "Model 1")
+
+stargazer(model_2,  type = "html", digits = 10, out = "model_2.html" , title = "Model 2")
+
+stargazer(model_3,  type = "html", digits = 10, out = "model_3.html" , title = "Model 3")
+
+stargazer(model_4,  type = "html", digits = 10, out = "model_4.html" , title = "Model 4")
+```
+  
+
+

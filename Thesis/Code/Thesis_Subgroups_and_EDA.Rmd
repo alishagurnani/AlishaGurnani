@@ -1,0 +1,337 @@
+---
+title: "Overeducation Subgroup Analysis and EDA"
+author: "Alisha Gurnani"
+date: "5/10/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set()
+
+
+#opts_knit$set(root.dir = "/Users/agurnani/Documents/Spring Semester/Thesis/Data/Processed")
+library(tidyverse)
+library(dplyr)
+library(tidycensus)
+library(gdata)
+library(ggplot2)
+library(stargazer)
+library(gsubfn)
+library(plotly)
+library(tidyr)
+library(lemon)
+library(viridis)
+```
+
+## Overeducation Exploratory Analysis
+
+###  Read in all datasets
+
+```{r}
+#read in all of the separate CSVS
+setwd("/Users/agurnani/Documents/Spring Semester/Thesis/Data/Processed")
+
+#read in all IPUMS ACS data first
+ACS_2004 <- read_csv("Processed/ACS_2004.csv")%>%
+ select(YEAR, OCC, OCCSOC, STATEFIP, AGE, RACE, SEX, MARST, CITIZEN, INCTOT, REGION,IND, EducAttainment, Overeducation)
+ACS_2005 <- read_csv("Processed/ACS_2005.csv")%>%
+ select(YEAR, OCC, OCCSOC, STATEFIP, AGE, RACE, SEX, MARST, CITIZEN, INCTOT, REGION,IND, EducAttainment, Overeducation)
+
+ACS_2006 <-read_csv("Processed/ACS_2006.csv")%>%
+  select(YEAR, OCC, OCCSOC, STATEFIP, AGE, RACE, SEX, MARST, CITIZEN, INCTOT, REGION,IND, EducAttainment, Overeducation)
+
+ACS_2007 <-read_csv("Processed/ACS_2007.csv")%>%
+  select(YEAR, OCC, OCCSOC, STATEFIP, AGE, RACE, SEX, MARST, CITIZEN, INCTOT, REGION,IND, EducAttainment, Overeducation)
+ACS_2008 <- read_csv("Processed/ACS_2008.csv")%>%
+  select(YEAR, OCC, OCCSOC, STATEFIP, AGE, RACE, SEX, MARST, CITIZEN, INCTOT, REGION,IND, EducAttainment, Overeducation)
+ACS_2009 <- read_csv("Processed/ACS_2009.csv")%>%
+  select(YEAR, OCC, OCCSOC, STATEFIP, AGE, RACE, SEX, MARST, CITIZEN, INCTOT, REGION,IND, EducAttainment, Overeducation)
+ACS_2010 <- read_csv("Processed/ACS_2010.csv")%>%
+  select(YEAR, OCC, OCCSOC, STATEFIP, AGE, RACE, SEX, MARST, CITIZEN, INCTOT, REGION,IND, EducAttainment, Overeducation)
+ACS_2011 <- read_csv("Processed/ACS_2011.csv")%>%
+ select(YEAR, OCC, OCCSOC, STATEFIP, AGE, RACE, SEX, MARST, CITIZEN, INCTOT, REGION,IND, EducAttainment, Overeducation)
+ACS_2012 <- read_csv("Processed/ACS_2012.csv")%>%
+ select(YEAR, OCC, OCCSOC, STATEFIP, AGE, RACE, SEX, MARST, CITIZEN, INCTOT, REGION,IND, EducAttainment, Overeducation)
+
+#read in BLS GDP 2004-2012
+BLS_GDP <- read_csv("/Users/agurnani/Documents/Spring Semester/Thesis/Data/Processed/BeaGDP.csv") %>%
+  select(TimePeriod, DataValue)  %>%
+  rename(YEAR = TimePeriod,
+         GDP = DataValue) %>%
+  filter(YEAR != 2013)
+```
+
+
+```{r}
+#view BLS
+BLS_GDP
+```
+
+```{r}
+#plot GDP by year - line graph
+GDP_Plot<- ggplot(data=BLS_GDP, aes(x=YEAR, y=GDP, group=1)) +
+  geom_line()+
+  geom_point() +
+  labs(title="U.S. Gross Domestic Product by Year",x="Year", y = "GDP")
+
+```
+
+
+```{r}
+### join all datasets
+
+All_ACS <- do.call("rbind", list(ACS_2004, ACS_2005, ACS_2006, ACS_2007, ACS_2008, ACS_2009, ACS_2010, ACS_2011, ACS_2012))
+
+```
+
+```{r}
+#view all acs dataset
+head(All_ACS)
+```
+
+
+
+## breakdown of overeducation and non-overeducated per year 
+```{r}
+#Overeducation data with NAS
+Overeducation_NAS <- All_ACS %>%
+  group_by(YEAR,Overeducation) %>%
+  dplyr::summarise(Number=n()) %>%
+   mutate(percent = Number / sum(Number) * 100)
+
+head(Overeducation_NAS)
+```
+
+
+```{r}
+#Overeducation data without NAS
+
+Overeducation_NO_NAS <- All_ACS  %>%
+  filter(!is.na(Overeducation))%>%
+  group_by(YEAR,Overeducation) %>%
+  dplyr::summarise(Number=n()) %>%
+  mutate(percent = Number / sum(Number) * 100)
+head(Overeducation_NO_NAS)
+
+```
+
+## distribution of Race through the data
+```{r}
+#distribution of Race
+Race1 <- All_ACS %>%
+  filter(!is.na(Overeducation))%>%
+  group_by(YEAR, RACE)%>%
+  summarise(Count = n()) %>%
+  mutate(percent = Count / sum(Count) * 100)
+head(Race1)
+```
+
+
+
+## Find Percentages per each variable : Region and Age
+
+
+
+### distribution of age over time
+```{r}
+
+age_data<- All_ACS %>%
+  filter(!is.na(Overeducation))%>%
+  select(YEAR, AGE, Overeducation)
+```
+
+```{r}
+str(All_ACS$AGE)
+```
+
+
+
+```{r}
+age_data["Age_Groups"] <- ifelse(age_data$AGE>=16 & age_data$AGE<=24, "16 to 24 years",
+                                      ifelse(age_data$AGE >= 25 & age_data$AGE <= 34, "25 to 35 years",
+                                             ifelse(age_data$AGE >= 35 & age_data$AGE <= 44, "35 to 44 years",
+                                                    ifelse(age_data$AGE >= 45 & age_data$AGE <= 54, "45 to 54 years",
+                                                           ifelse(age_data$AGE >= 55 & age_data$AGE <= 64 , "55 to 64 years",
+                                                                  ifelse(age_data$AGE >= 65 , "65 years and Up", NA))))))
+```
+
+
+```{r}
+#AGE -- create buckets for age first - or line graph with x=age and y=percent
+Age <- age_data %>%
+  filter(!is.na(Overeducation))%>%
+  filter(!is.na(Age_Groups)) %>%
+  group_by(YEAR, Age_Groups, Overeducation)%>%
+  summarise(Count = n())
+
+head(Age)
+
+```
+
+
+```{r}
+#age and rate of overeducation per year
+Overeducation_Age <- age_data %>%
+  filter(!is.na(Overeducation))%>%
+  filter(!is.na(Age_Groups)) %>%
+  group_by(YEAR, Age_Groups, Overeducation)%>%
+  dplyr::summarise(Count=n()) %>%
+  mutate(percent = Count / sum(Count) * 100)
+
+head(Overeducation_Age)
+```
+
+
+```{r}
+#plot for age and rate of overeducation over time
+age_barplot <- Overeducation_Age %>%
+  filter(Overeducation != 0) %>%
+  filter(!is.na(Age_Groups)) %>%
+  ggplot(
+    aes(x=Age_Groups, y = percent/100, fill = Age_Groups)) +
+  geom_bar(stat = "identity")+
+  scale_y_continuous(labels = scales::percent_format()) +
+  labs(title = "Percent of Overeducation per Age Group by Year", x= "Age", y = "Percent of Overeducation", fill = "Age Groups") +
+  theme(axis.text.x = element_blank(), axis.ticks = element_blank())+ 
+  facet_wrap(~YEAR)
+```
+
+
+
+### distribution of population in different regions overtime
+
+```{r}
+Regions_data <- All_ACS %>%
+  filter(!is.na(Overeducation))%>%
+  select(YEAR, REGION, Overeducation, STATEFIP)
+```
+
+```{r}
+str(Regions_data$STATEFIP)
+```
+
+
+The regions will be set based on the BEA regional definition as follows: Far West, Great Lakes, Mideast, New England, Plains, Rocky Mountain, Southeast, and Southwest. 
+Far West:
+  - California - 06
+  - Nevada - 32
+  - Oregon - 41
+  - Washington - 53
+  -Alaska - 2
+  -hawaii -15
+Great Lakes:
+  - Wisconsan - 55
+  - Illinois - 17
+  - Michigan - 26
+  - Indiana - 18
+  - Ohio - 39
+Mideast:
+  -New York - 36
+  -Pennsylvania - 42
+  - New Jersey - 34
+  - Deleware - 10
+  - Maryland - 24
+  - D.C --??
+New England:
+  -Maine - 23
+  -Massachusetts - 25
+  -New Hampshire - 33
+  -Rhode Island - 44
+  - Connecticut - 9
+  -Vermont - 50
+Plains:
+  -North Dakota - 38
+  -South Dakota - 46
+  - Minnesota - 27
+  - Nebraska - 31
+  - Kansas - 20 
+  - Missouri -29
+  - Iowa -19
+Rocky Mountains:
+  -Montana - 30
+  - Idaho -16
+  - Wyoming - 56
+  -Utah - 49
+  - Colorado -8
+ Southeast:
+  -Virginia - 51
+  -West Virginia - 54
+  - North Carolina - 37
+  - South Carolina - 45
+  - Georgia - 13
+  -Florida - 12
+  -Kentucky - 21
+  -Tennessee - 47
+  -Alabama - 1
+  -Mississippi - 28
+  -Arkansas - 5
+  -Louisiana- 22
+ Southwest:
+  - arizona - 4
+  - New Mexico - 35
+  -Oklahoma - 40
+  - Texas - 48
+
+
+```{r}
+Regions_data["Census_Region"] <- NA
+Regions_data$Census_Region[Regions_data$STATEFIP ==  6 | Regions_data$STATEFIP == 32 | Regions_data$STATEFIP== 41| Regions_data$STATEFIP== 53| Regions_data$STATEFIP== 2|
+                             Regions_data$STATEFIP==15] = "Far West" 
+Regions_data$Census_Region[Regions_data$STATEFIP == 17| Regions_data$STATEFIP == 18| Regions_data$STATEFIP ==26| Regions_data$STATEFIP == 39| Regions_data$STATEFIP == 55] = "Great Lakes"
+Regions_data$Census_Region[Regions_data$STATEFIP == 10| Regions_data$STATEFIP == 24| Regions_data$STATEFIP == 34| Regions_data$STATEFIP ==36| Regions_data$STATEFIP ==42] = "Mideast"
+Regions_data$Census_Region[Regions_data$STATEFIP == 9| Regions_data$STATEFIP == 23| Regions_data$STATEFIP == 25| Regions_data$STATEFIP == 33| Regions_data$STATEFIP == 44|
+                             Regions_data$STATEFIP == 50] = "New England"
+Regions_data$Census_Region[Regions_data$STATEFIP == 19| Regions_data$STATEFIP == 20| Regions_data$STATEFIP == 29| Regions_data$STATEFIP == 27| Regions_data$STATEFIP == 31|
+                             Regions_data$STATEFIP == 38| Regions_data$STATEFIP == 46] = "Plains"
+Regions_data$Census_Region[Regions_data$STATEFIP== 8| Regions_data$STATEFIP == 16| Regions_data$STATEFIP == 30| Regions_data$STATEFIP == 49| Regions_data$STATEFIP == 56] = "Rocky Mountains"
+Regions_data$Census_Region[Regions_data$STATEFIP== 1| Regions_data$STATEFIP == 5| Regions_data$STATEFIP == 12| Regions_data$STATEFIP == 21| Regions_data$STATEFIP == 13| 
+                             Regions_data$STATEFIP== 22| Regions_data$STATEFIP == 28| Regions_data$STATEFIP ==37| Regions_data$STATEFIP == 45| Regions_data$STATEFIP == 47| 
+                             Regions_data$STATEFIP == 51| Regions_data$STATEFIP == 54] = "Southeast"
+Regions_data$Census_Region[Regions_data$STATEFIP== 4| Regions_data$STATEFIP ==35| Regions_data$STATEFIP == 40| Regions_data$STATEFIP == 48] = "Southwest"
+```
+
+
+```{r}
+#Region data
+Regions <- Regions_data %>%
+  filter(!is.na(Overeducation))%>%
+  filter(!is.na(Census_Region)) %>%
+  group_by(YEAR, Census_Region, Overeducation)%>%
+  summarise(Count = n())
+
+head(Regions)
+
+```
+
+
+```{r}
+#region and rate of overeducation per year
+Overeducation_Region <- Regions_data %>%
+  filter(!is.na(Overeducation))%>%
+  filter(!is.na(Census_Region)) %>%
+  group_by(YEAR, Census_Region, Overeducation)%>%
+  dplyr::summarise(Count=n()) %>%
+  mutate(percent = Count / sum(Count) * 100)
+
+head(Overeducation_Region)
+```
+
+
+```{r}
+#plot for region and rate of overeducation over time
+regions_barplot <- Overeducation_Region %>%
+  filter(Overeducation != 0) %>%
+  filter(!is.na(Census_Region)) %>%
+  ggplot(
+    aes(x=Census_Region, y = percent/100, fill = Census_Region)) +
+  geom_bar(stat = "identity")+
+  scale_y_continuous(labels = scales::percent_format()) +
+  labs(title = "Percent of Overeducation per Region in the United States by Year", x= "Region", y = "Percent of Overeducation", fill = "Region") +
+  theme(axis.text.x = element_blank(), axis.ticks = element_blank())+ 
+  facet_wrap(~YEAR)+
+  scale_color_viridis(discrete = TRUE, option = "D")+
+  scale_fill_viridis(discrete = TRUE) 
+  
+```
+
+
