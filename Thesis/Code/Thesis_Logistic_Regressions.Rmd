@@ -10,7 +10,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 
 
-#opts_knit$set(root.dir = "/Users/agurnani/Documents/Spring Semester/Thesis/Data/Processed")
+#opts_knit$set(root.dir = "Thesis/Data/Processed")
 library(tidyverse)
 library(dplyr)
 library(tidycensus)
@@ -29,7 +29,7 @@ Logistic Regressions for Overeducation
 
 ```{r}
 #read in all of the separate CSVS
-setwd("/Users/agurnani/Documents/Spring Semester/Thesis/Data/Processed")
+setwd("Thesis/Data/Processed")
 
 #read in all IPUMS ACS data first
 ACS_2004 <- read_csv("Processed/ACS_2004.csv")%>%
@@ -54,7 +54,7 @@ ACS_2012 <- read_csv("Processed/ACS_2012.csv")%>%
  select(YEAR, OCC, OCCSOC, STATEFIP, AGE, RACE, SEX, MARST, CITIZEN, INCTOT, REGION,IND, EducAttainment, Overeducation)
 
 #read in BLS GDP 2004-2012
-BLS_GDP <- read_csv("/Users/agurnani/Documents/Spring Semester/Thesis/Data/Processed/BeaGDP.csv") %>%
+BLS_GDP <- read_csv("Thesis/Data/Processed/BeaGDP.csv") %>%
   select(TimePeriod, DataValue)  %>%
   rename(YEAR = TimePeriod,
          GDP = DataValue) %>%
