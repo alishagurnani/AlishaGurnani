@@ -6,7 +6,7 @@ library(bea.R)
 library(httr)
 
 
-beakey = '386344DA-444A-4E59-A4FC-4DA15935C1A3'
+beakey = 'XXXXXXXXX'
 
 #finding parameter values
 paramvals <- beaParamVals(beakey, 'NIPA', 'TableID' )
@@ -44,7 +44,7 @@ str(beaGDP)
 
 beaGDP #should be written out to another csv 
 
-write.csv(beaGDP, "/Users/agurnani/Documents/Spring Semester/Thesis/Data/Processed/BeaGDP.csv", row.names = FALSE)
+write.csv(beaGDP, "Thesis/Data/Processed/BeaGDP.csv", row.names = FALSE)
 
 #visualize GDP for 2004 to 2013
 
