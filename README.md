@@ -2,7 +2,6 @@
 
 #### I'm a recent graduate from Columbia University with a Master's in Quantitative Methods in the Social Sciences.
 
-#### This repository holds my Final Thesis project from the program. My thesis is titled "Overeducation: The Effects of the Great Recession on the Labor Market"
 <!--
 **alishagurnani/AlishaGurnani** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
 
