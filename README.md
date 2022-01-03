@@ -4,8 +4,6 @@
 
 #### This repository holds my Master's Thesis, which can be found in the Thesis folder or by following this link https://github.com/alishagurnani/AlishaGurnani/tree/main/Thesis
 
-#### The repository will also be updated in the near future with various projects I worked on throughout my Master's program.
-
 
 
 <!--
