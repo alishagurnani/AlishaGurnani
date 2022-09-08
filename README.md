@@ -2,9 +2,9 @@
 
 #### I'm a recent graduate from Columbia University with a Master's in Quantitative Methods in the Social Sciences.
 
-#### This repository holds my Master's Thesis, which can be found in the Thesis folder or by following this link https://github.com/alishagurnani/AlishaGurnani/tree/main/Thesis
+#### This repository holds my Master's Thesis, which can be found in the Thesis folder or by following this link: [Master'S Thesis](https://github.com/alishagurnani/AlishaGurnani/tree/main/Thesis)
 
-### This repository also holds a folder of guided projects I have done through out the years which can be found in the Guided Projects folder or by following this link https://github.com/alishagurnani/AlishaGurnani/tree/main/Guided%20Projects 
+#### This repository also holds a folder of guided projects I have done through out the years which can be found in the Guided Projects folder or by following this link: [Guided Projects](https://github.com/alishagurnani/AlishaGurnani/tree/main/Guided%20Projects)
 
 
 
