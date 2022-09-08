@@ -1,5 +1,11 @@
 ### Hi there 👋
 
+#### I'm a recent graduate from Columbia University with a Master's in Quantitative Methods in the Social Sciences.
+
+#### This repository holds my Master's Thesis, which can be found in the Thesis folder or by following this link https://github.com/alishagurnani/AlishaGurnani/tree/main/Thesis
+
+
+
 <!--
 **alishagurnani/AlishaGurnani** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
 

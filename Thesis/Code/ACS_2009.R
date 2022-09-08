@@ -18,7 +18,7 @@ library(readxl)
 
 #Bring in all IPUMS ACS census data
 
-ddi <- read_ipums_ddi("/Users/agurnani/Documents/Spring Semester/Thesis/Data/usa_00007.xml")
+ddi <- read_ipums_ddi("Thesis/Data/Raw/usa_00007.xml")
 data <- read_ipums_micro(ddi, verbose = FALSE)
 
 head(data)
@@ -71,7 +71,7 @@ ACS_2009$US2009A_OCCP = str_remove(ACS_2009$US2009A_OCCP, "^0+")
 
 
 #bring in occupation SOC crosswalk 2010 data
-occupation_educ2010 <- read.csv("/Users/agurnani/Documents/Spring Semester/Thesis/Data/Processed/ACS_BLS_2010.csv")
+occupation_educ2010 <- read.csv("Thesis/Data/Processed/ACS_BLS_2010.csv")
 
 
 str(occupation_educ2010)
@@ -199,7 +199,7 @@ data_attempt <- occupation_educ2010 %>%
   filter(ACS_CODE == 2320)
 
 #write out to csv
-write.csv(ACS_2009, "/Users/agurnani/Documents/Spring Semester/Thesis/Data/Processed/ACS_2009.csv", row.names = FALSE)
+write.csv(ACS_2009, "Thesis/Data/Processed/ACS_2009.csv", row.names = FALSE)
 
 
 
