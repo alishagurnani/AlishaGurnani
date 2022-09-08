@@ -4,6 +4,8 @@
 
 #### This repository holds my Master's Thesis, which can be found in the Thesis folder or by following this link https://github.com/alishagurnani/AlishaGurnani/tree/main/Thesis
 
+### This repository also holds a folder of guided projects I have done through out the years which can be found in the Guided Projects folder or by following this link https://github.com/alishagurnani/AlishaGurnani/tree/main/Guided%20Projects 
+
 
 
 <!--
