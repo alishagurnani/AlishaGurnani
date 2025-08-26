@@ -1,12 +1,12 @@
 ### Hi there 👋
 
-#### I'm a recent graduate from Columbia University with a Master's in Quantitative Methods in the Social Sciences.
+#### I'm Alisha, an experienced Data Analyst with a strong background in both private and public sectors. In my current role at the Census, my passion for using data analytic techniques to form insights and improve data products has helped me support the Census and clients effectively.
 
-#### This repository holds my Master's Thesis, which can be found in the Thesis folder or by following this link: [Master's Thesis](https://github.com/alishagurnani/AlishaGurnani/tree/main/Thesis)
+#### I am also a graduate from Columbia University with a Master's in Quantitative Methods in the Social Sciences. This repository holds my Master's Thesis, which can be found in the Thesis folder or by following this link: [Master's Thesis](https://github.com/alishagurnani/AlishaGurnani/tree/main/Thesis)
 
 #### Additionally, past research projects that I have conducted through classes in my masters programs can be found in the Projects folder or by following this link: [Projects](https://github.com/alishagurnani/AlishaGurnani/tree/main/Projects)
 
-#### This repository also holds a folder of guided projects I have done through out the years which can be found in the Guided Projects folder or by following this link: [Guided Projects](https://github.com/alishagurnani/AlishaGurnani/tree/main/Guided%20Projects)
+#### This repository also holds a folder of guided Marketing Analytics projects I have done through out the years which can be found in the Guided Projects folder or by following this link: [Guided Projects](https://github.com/alishagurnani/AlishaGurnani/tree/main/Guided%20Projects)
 
 
 
